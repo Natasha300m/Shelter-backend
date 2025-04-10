@@ -1,5 +1,6 @@
 package com.shelter.mykyda.database.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -18,7 +19,10 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "users")
+@Table(name = "users",
+        uniqueConstraints = {
+                @UniqueConstraint(columnNames = "email")
+        })
 public class User {
 
     @Id
@@ -45,5 +49,6 @@ public class User {
 
     @Builder.Default
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+    @JsonBackReference
     private List<Post> posts = new ArrayList<>();
 }

@@ -1,5 +1,6 @@
 package com.shelter.mykyda.database.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -33,13 +34,16 @@ public class Shelter {
 
     @Builder.Default
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "shelter")
+    @JsonBackReference
     private List<User> managers = new ArrayList<>();
 
     @Builder.Default
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "shelter")
+    @JsonBackReference
     private List<Post> posts = new ArrayList<>();
 
     @Builder.Default
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "shelter")
+    @JsonBackReference
     private List<NewsItem> news = new ArrayList<>();
 }

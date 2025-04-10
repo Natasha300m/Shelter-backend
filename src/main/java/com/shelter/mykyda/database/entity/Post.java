@@ -1,11 +1,15 @@
 package com.shelter.mykyda.database.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Data
 @Entity
@@ -19,20 +23,16 @@ public class Post {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    //Todo:validate
-    private String imageUrls;
-
     @NotBlank(message = "title is required")
     private String title;
 
-    @NotBlank(message = "description is required")
     private String description;
 
     @NotBlank(message = "pet type is invalid")
     private String petType;
 
     @Min(value = 0, message = "pet age should be greater than 0")
-    private Float petAge;
+    private Integer petAge;
 
     @Enumerated(EnumType.STRING)
     @NotNull(message = "need is invalid")
@@ -49,4 +49,7 @@ public class Post {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "shelter_id")
     private Shelter shelter;
+
+    @OneToMany(mappedBy = "post")
+    private List<Image> images;
 }

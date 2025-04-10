@@ -8,4 +8,4 @@ spring:
     import: file:.env[.properties]
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update

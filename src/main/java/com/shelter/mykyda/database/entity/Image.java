@@ -12,19 +12,17 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "news_item")
-public class NewsItem {
+@Table(name = "image")
+public class Image {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message = "title is required")
-    private String title;
+    @NotBlank(message = "url can`t be null")
+    private String url;
 
-    private String content;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "shelter_id")
-    private Shelter shelter;
+    @ManyToOne
+    @JoinColumn(name = "post_id")
+    private Post post;
 }
