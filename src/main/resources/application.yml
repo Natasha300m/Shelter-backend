@@ -9,3 +9,11 @@ spring:
   jpa:
     hibernate:
       ddl-auto: validate
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 5MB
+      max-request-size: 10MB
+aws:
+  access: ${AWS_ACCESS}
+  secret: ${AWS_SECRET}

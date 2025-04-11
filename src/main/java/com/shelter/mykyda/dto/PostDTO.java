@@ -20,8 +20,6 @@ public class PostDTO {
 
     private String title;
 
-    private String imageUrls;
-
     private String description;
 
     private String petType;

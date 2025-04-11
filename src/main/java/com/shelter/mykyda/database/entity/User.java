@@ -10,6 +10,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDeleteAction;
+import org.hibernate.annotations.OnDelete;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,6 +44,7 @@ public class User {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "shelter_id")
+    @OnDelete(action = OnDeleteAction.SET_NULL)
     private Shelter shelter;
 
     //Todo:validate
