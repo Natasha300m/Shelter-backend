@@ -83,7 +83,7 @@ public class SaveService {
             }
         });
         }
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @Transactional(rollbackFor = RuntimeException.class)
@@ -93,12 +93,13 @@ public class SaveService {
         var newsItem = dto.unmap();
         newsItem.setShelter(shelter);
         newsItemRepository.save(newsItem);
-        return new ResponseEntity<>(newsItem.getId(),HttpStatus.OK);
+        return new ResponseEntity<>(newsItem.getId(),HttpStatus.CREATED);
     }
 
     @Transactional(rollbackFor = RuntimeException.class)
     public ResponseEntity<String> putNewsItem(Long id, NewsItemSavePutDTO dto) {
         //var user = userRepository.findByEmail(dto.getEmail()).orElseThrow(() -> new NotFoundException("User with such email not found"));
+        newsItemRepository.findById(id).orElseThrow(() -> new NotFoundException("NewsItem with such id not found"));
         var shelter = shelterRepository.findById(dto.getShelterId()).orElseThrow(() -> new NotFoundException("Shelter with such id not found"));
         var newsItem = dto.unmap();
         newsItem.setId(id);
@@ -112,6 +113,6 @@ public class SaveService {
         //var user = userRepository.findByEmail(dto.getEmail()).orElseThrow(() -> new NotFoundException("User with such email not found"));
         var shelter = dto.unmap();
         shelterRepository.save(shelter);
-        return new ResponseEntity<>(shelter.getId(),HttpStatus.OK);
+        return new ResponseEntity<>(shelter.getId(),HttpStatus.CREATED);
     }
 }

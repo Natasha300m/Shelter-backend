@@ -31,7 +31,7 @@ public class PostSaveDTO {
         return Post.builder()
                 .title(title)
                 .description(desc)
-                .petType(petType)
+                .petType(petType.substring(0, 1).toUpperCase() + petType.substring(1).toLowerCase())
                 .petAge(petAge)
                 .need(Need.valueOf(needs.toUpperCase()))
                 .build();

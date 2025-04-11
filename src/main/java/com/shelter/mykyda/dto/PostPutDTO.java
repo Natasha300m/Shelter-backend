@@ -34,7 +34,7 @@ public class PostPutDTO {
         return Post.builder()
                 .title(title)
                 .description(desc)
-                .petType(petType)
+                .petType(petType.substring(0, 1).toUpperCase() + petType.substring(1).toLowerCase())
                 .petAge(petAge)
                 .authorRole(Role.valueOf(authorRole.toUpperCase()))
                 .need(Need.valueOf(needs.toUpperCase()))
