@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/shelters")
+@RequestMapping("/api/shelters")
 @RequiredArgsConstructor
 public class ShelterController {
 

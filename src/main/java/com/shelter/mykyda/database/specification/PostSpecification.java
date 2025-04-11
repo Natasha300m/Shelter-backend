@@ -5,6 +5,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 
 @Component
 @RequiredArgsConstructor
@@ -20,14 +22,23 @@ public class PostSpecification {
                 builder.equal(root.get("petType"), petType);
     }
 
+    public static Specification<Post> petTypeNotIn(List<String> excludedTypes) {
+        return (root, query, builder) -> root.get("petType").in(excludedTypes).not();
+    }
+
     public static Specification<Post> hasTitle(String title) {
         return (root, query, builder) ->
                 builder.equal(root.get("title"), title);
     }
 
-    public static Specification<Post> hasPetAge(Integer petAge) {
+    public static Specification<Post> hasPetAgeAbove(Integer petAge) {
         return (root, query, builder) ->
-                builder.equal(root.get("petAge"), petAge);
+                builder.greaterThanOrEqualTo(root.get("petAge"), petAge);
+    }
+
+    public static Specification<Post> hasPetAgeBelow(Integer petAge) {
+        return (root, query, builder) ->
+                builder.lessThanOrEqualTo(root.get("petAge"), petAge);
     }
 
     public static Specification<Post> hasShelterId(Long shelterId) {

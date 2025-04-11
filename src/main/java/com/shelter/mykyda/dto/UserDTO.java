@@ -31,5 +31,13 @@ public class UserDTO {
                 .shelter(user.getShelter() != null ? ShelterDTO.mapToDTO(user.getShelter()) : null)
                 .build();
     }
+    public static UserDTO mapWithoutDependency(User user) {
+        return UserDTO.builder()
+                .id(user.getId())
+                .contacts(user.getContacts())
+                .email(user.getEmail())
+                .role(user.getRole().name())
+                .build();
+    }
 
 }

@@ -40,6 +40,7 @@ public class PostDTO {
 
     public static PostDTO mapToDTO(Post post) {
         return PostDTO.builder()
+                .authorRole(post.getAuthorRole().name())
                 .id(post.getId())
                 .title(post.getTitle())
                 .description(post.getDescription())
@@ -47,7 +48,7 @@ public class PostDTO {
                 .petAge(post.getPetAge())
                 .need(post.getNeed().name())
                 .user(post.getUser() != null ?
-                        UserDTO.mapToDTO(post.getUser()) : null)
+                        UserDTO.mapWithoutDependency(post.getUser()) : null)
                 .shelter(post.getShelter() != null ?
                         ShelterDTO.mapToDTO(post.getShelter()) : null)
                 .images(post.getImages() != null ?
