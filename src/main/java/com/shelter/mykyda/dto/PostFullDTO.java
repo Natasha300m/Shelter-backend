@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class PostDTO {
+public class PostFullDTO {
 
     private Long id;
 
@@ -30,10 +30,14 @@ public class PostDTO {
 
     private String authorRole;
 
+    private ShelterDTO shelter;
+
+    private UserDTO user;
+
     private List<ImageDTO> images = new ArrayList<>();
 
-    public static PostDTO mapToDTO(Post post) {
-        return PostDTO.builder()
+    public static PostFullDTO mapToDTO(Post post) {
+        return PostFullDTO.builder()
                 .authorRole(post.getAuthorRole().name())
                 .id(post.getId())
                 .title(post.getTitle())
@@ -41,6 +45,10 @@ public class PostDTO {
                 .petType(post.getPetType())
                 .petAge(post.getPetAge())
                 .need(post.getNeed().name())
+                .user(post.getUser() != null ?
+                        UserDTO.mapWithoutDependency(post.getUser()) : null)
+                .shelter(post.getShelter() != null ?
+                        ShelterDTO.mapToDTO(post.getShelter()) : null)
                 .images(post.getImages() != null ?
                         post.getImages().stream().map(ImageDTO::mapToDTO).collect(Collectors.toList()) : null)
                 .build();

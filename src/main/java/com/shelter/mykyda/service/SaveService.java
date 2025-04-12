@@ -36,12 +36,13 @@ public class SaveService {
     //:ToDo add Principle and ownership check
     @Transactional(rollbackFor = RuntimeException.class)
     public ResponseEntity<Long> savePost(List<MultipartFile> images, PostSaveDTO dto) {
-
         var user = userRepository.findByEmail(dto.getEmail()).orElseThrow(() -> new NotFoundException("User with such email not found"));
-        var shelter = shelterRepository.findById(dto.getShelterId()).orElseThrow(() -> new NotFoundException("Shelter with such id not found"));
         var post = dto.unmap();
         post.setUser(user);
-        post.setShelter(shelter);
+        if (dto.getShelterId() != null) {
+            var shelter = shelterRepository.findById(dto.getShelterId()).orElseThrow(() -> new NotFoundException("Shelter with such id not found"));
+            post.setShelter(shelter);
+        }
         postRepository.saveAndFlush(post);
 
         if (images != null) {
@@ -56,33 +57,35 @@ public class SaveService {
     }
 
     @Transactional(rollbackFor = RuntimeException.class)
-    public ResponseEntity<String> putPost(Long id, List<MultipartFile> images,List<Long> imagesToDelete, PostPutDTO dto) {
-
+    public ResponseEntity<String> putPost(Long id, List<MultipartFile> images, PostPutDTO dto) {
         var user = userRepository.findByEmail(dto.getEmail()).orElseThrow(() -> new NotFoundException("User with such email not found"));
-        var shelter = shelterRepository.findById(dto.getShelterId()).orElseThrow(() -> new NotFoundException("Shelter with such id not found"));
+        var postFound = postRepository.findById(id).orElseThrow(() -> new NotFoundException("Post with such id not found"));
         var post = dto.unmap();
         post.setId(id);
         post.setUser(user);
-        post.setShelter(shelter);
+        if (dto.getShelterId() != null) {
+            var shelter = shelterRepository.findById(dto.getShelterId()).orElseThrow(() -> new NotFoundException("Shelter with such id not found"));
+            post.setShelter(shelter);
+        }
         postRepository.save(post);
 
+        var imagesToDelete = imageRepository.findAllByPostId(id);
         if (images != null) {
-            List<Image> postImages = new ArrayList<>();
-            images.forEach(image -> postImages.add(Image.builder()
+            if (imagesToDelete != null) {
+                imagesToDelete.forEach(image -> {
+                    mediaService.deletePostImage(image.getUrl());
+                    imageRepository.deleteById(image.getId());
+                });
+            }
+
+            List<Image> newImages = new ArrayList<>();
+            images.forEach(image -> newImages.add(Image.builder()
                     .post(post)
                     .url(mediaService.uploadPostImage(image))
                     .build()));
-            imageRepository.saveAll(postImages);
+            imageRepository.saveAll(newImages);
         }
-        if (imagesToDelete != null) {
-        imagesToDelete.forEach(imageId -> {
-            var image = imageRepository.findById(Long.parseLong(imageId.toString()));
-            if (image.isPresent()){
-                mediaService.deletePostImage(image.get().getUrl());
-                imageRepository.deleteById(Long.parseLong(imageId.toString()));
-            }
-        });
-        }
+
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -93,7 +96,7 @@ public class SaveService {
         var newsItem = dto.unmap();
         newsItem.setShelter(shelter);
         newsItemRepository.save(newsItem);
-        return new ResponseEntity<>(newsItem.getId(),HttpStatus.CREATED);
+        return new ResponseEntity<>(newsItem.getId(), HttpStatus.CREATED);
     }
 
     @Transactional(rollbackFor = RuntimeException.class)
@@ -113,6 +116,6 @@ public class SaveService {
         //var user = userRepository.findByEmail(dto.getEmail()).orElseThrow(() -> new NotFoundException("User with such email not found"));
         var shelter = dto.unmap();
         shelterRepository.save(shelter);
-        return new ResponseEntity<>(shelter.getId(),HttpStatus.CREATED);
+        return new ResponseEntity<>(shelter.getId(), HttpStatus.CREATED);
     }
 }

@@ -1,5 +1,6 @@
 package com.shelter.mykyda.http.controller;
 
+import com.shelter.mykyda.dto.PostFullDTO;
 import com.shelter.mykyda.dto.PostSaveDTO;
 import com.shelter.mykyda.dto.PostDTO;
 import com.shelter.mykyda.dto.PostPutDTO;
@@ -26,20 +27,19 @@ public class PostController {
     private final DeleteService deleteService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<PostDTO> getPost(@PathVariable Long id) {
+    public ResponseEntity<PostFullDTO> getPost(@PathVariable Long id) {
         return postService.findById(id);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<String> putPost(@PathVariable Long id,
                                           @RequestPart(value = "post") PostPutDTO dto,
-                                          @RequestPart(value = "images", required = false) List<MultipartFile> images,
-                                          @RequestPart(value = "imagesToDelete",required = false) List<Long> imagesToDelete) {
-        return saveService.putPost(id, images, imagesToDelete, dto);
+                                          @RequestPart(value = "images", required = false) List<MultipartFile> images) {
+        return saveService.putPost(id, images, dto);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deletePost(@PathVariable Long id){
+    public ResponseEntity<String> deletePost(@PathVariable Long id) {
         return deleteService.deletePost(id);
     }
 
@@ -49,7 +49,7 @@ public class PostController {
     }
 
     @PostMapping
-    public ResponseEntity<Long> postPost(@RequestPart(value = "images",required = false) List<MultipartFile> images,
+    public ResponseEntity<Long> postPost(@RequestPart(value = "images", required = false) List<MultipartFile> images,
                                          @RequestPart("post") PostSaveDTO post) {
         return saveService.savePost(images, post);
     }

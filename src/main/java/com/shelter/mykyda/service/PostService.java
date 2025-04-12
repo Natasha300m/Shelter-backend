@@ -5,6 +5,7 @@ import com.shelter.mykyda.database.entity.Role;
 import com.shelter.mykyda.database.repository.PostRepository;
 import com.shelter.mykyda.database.specification.PostSpecification;
 import com.shelter.mykyda.dto.PostDTO;
+import com.shelter.mykyda.dto.PostFullDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
@@ -27,9 +28,9 @@ public class PostService {
     private final Integer POSTS_PAGE_SIZE = 2;
 
     @Transactional(readOnly = true)
-    public ResponseEntity<PostDTO> findById(Long id) {
+    public ResponseEntity<PostFullDTO> findById(Long id) {
         var post = postRepository.findById(id);
-        return post.map(value -> new ResponseEntity<>(PostDTO.mapToDTO(value), HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        return post.map(value -> new ResponseEntity<>(PostFullDTO.mapToDTO(value), HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
     @Transactional(readOnly = true)

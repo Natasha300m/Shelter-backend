@@ -1,22 +1,19 @@
 package com.shelter.mykyda.database.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.hibernate.annotations.OnDeleteAction;
+import lombok.*;
 import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Data
+@Getter
+@Setter
 @Entity
 @Builder
 @NoArgsConstructor
@@ -47,11 +44,9 @@ public class User {
     @OnDelete(action = OnDeleteAction.SET_NULL)
     private Shelter shelter;
 
-    //Todo:validate
     private String contacts;
 
     @Builder.Default
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
-    @JsonBackReference
     private List<Post> posts = new ArrayList<>();
 }
