@@ -1,3 +1,6 @@
+**/src/main/resources/keystore/
+./src/main/resources/keystore/
+/src/main/resources/keystore/
 HELP.md
 .gradle
 build/

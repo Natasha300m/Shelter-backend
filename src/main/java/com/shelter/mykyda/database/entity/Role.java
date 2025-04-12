@@ -1,6 +1,13 @@
 package com.shelter.mykyda.database.entity;
 
-public enum Role {
+import org.springframework.security.core.GrantedAuthority;
+
+public enum Role implements GrantedAuthority {
     VOLUNTEER,
-    MANAGER
+    MANAGER;
+
+    @Override
+    public String getAuthority() {
+        return name();
+    }
 }
