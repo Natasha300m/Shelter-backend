@@ -15,8 +15,6 @@ public class PostSaveDTO {
 
     private String title;
 
-    private String email;
-
     private String desc;
 
     private String petType;
@@ -24,8 +22,6 @@ public class PostSaveDTO {
     private Integer petAge;
 
     private String needs;
-
-    private Long shelterId;
 
     public Post unmap() {
         return Post.builder()

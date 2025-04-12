@@ -2,7 +2,6 @@ package com.shelter.mykyda.dto;
 
 import com.shelter.mykyda.database.entity.Need;
 import com.shelter.mykyda.database.entity.Post;
-import com.shelter.mykyda.database.entity.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,10 +14,6 @@ import lombok.NoArgsConstructor;
 public class PostPutDTO {
 
     private String title;
-
-    private String email;
-
-    private String authorRole;
 
     private String desc;
 
@@ -36,7 +31,6 @@ public class PostPutDTO {
                 .description(desc)
                 .petType(petType.substring(0, 1).toUpperCase() + petType.substring(1).toLowerCase())
                 .petAge(petAge)
-                .authorRole(Role.valueOf(authorRole.toUpperCase()))
                 .need(Need.valueOf(needs.toUpperCase()))
                 .build();
     }

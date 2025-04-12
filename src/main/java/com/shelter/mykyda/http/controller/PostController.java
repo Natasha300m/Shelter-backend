@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.Map;
 
@@ -34,13 +35,15 @@ public class PostController {
     @PutMapping("/{id}")
     public ResponseEntity<String> putPost(@PathVariable Long id,
                                           @RequestPart(value = "post") PostPutDTO dto,
-                                          @RequestPart(value = "images", required = false) List<MultipartFile> images) {
-        return saveService.putPost(id, images, dto);
+                                          @RequestPart(value = "images", required = false) List<MultipartFile> images,
+                                          Principal principal) {
+        return saveService.putPost(id, images, dto, principal);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deletePost(@PathVariable Long id) {
-        return deleteService.deletePost(id);
+    public ResponseEntity<String> deletePost(@PathVariable Long id,
+                                             Principal principal) {
+        return deleteService.deletePost(id, principal);
     }
 
     @GetMapping()
@@ -50,7 +53,8 @@ public class PostController {
 
     @PostMapping
     public ResponseEntity<Long> postPost(@RequestPart(value = "images", required = false) List<MultipartFile> images,
-                                         @RequestPart("post") PostSaveDTO post) {
-        return saveService.savePost(images, post);
+                                         @RequestPart("post") PostSaveDTO post,
+                                         Principal principal) {
+        return saveService.savePost(images, post, principal);
     }
 }

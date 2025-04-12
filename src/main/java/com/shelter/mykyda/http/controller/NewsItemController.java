@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.Map;
 
@@ -24,26 +25,29 @@ public class NewsItemController {
     private final DeleteService deleteService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<NewsItemDTO> getPost(@PathVariable Long id) {
+    public ResponseEntity<NewsItemDTO> getNewsItem(@PathVariable Long id) {
         return newsItemService.findById(id);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<String> putNewsItem(@PathVariable Long id,
-                                              @RequestBody NewsItemSavePutDTO dto) {
-        return saveService.putNewsItem(id, dto);
+                                              @RequestBody NewsItemSavePutDTO dto,
+                                              Principal principal) {
+        return saveService.putNewsItem(id, dto, principal);
 
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteNewsItem(@PathVariable Long id) {
-        return deleteService.deleteNewsItem(id);
+    public ResponseEntity<String> deleteNewsItem(@PathVariable Long id,
+                                                 Principal principal) {
+        return deleteService.deleteNewsItem(id, principal);
 
     }
 
     @PostMapping()
-    public ResponseEntity<Long> postNewsItem(@RequestBody NewsItemSavePutDTO dto) {
-        return saveService.saveNewsItem(dto);
+    public ResponseEntity<Long> postNewsItem(@RequestBody NewsItemSavePutDTO dto,
+                                             Principal principal) {
+        return saveService.saveNewsItem(dto, principal);
 
     }
 

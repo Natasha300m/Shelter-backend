@@ -1,6 +1,5 @@
 package com.shelter.mykyda.security.config;
 
-import com.shelter.mykyda.database.entity.Role;
 import com.shelter.mykyda.security.service.UserService;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -37,7 +36,7 @@ public class SecurityConfig {
         CookieCsrfTokenRepository csrfTokenRepository = CookieCsrfTokenRepository.withHttpOnlyFalse();
         csrfTokenRepository.setCookieCustomizer(cookie -> cookie.secure(true).sameSite("None"));
 
-        http.csrf(csrf->csrf.
+        http.csrf(csrf -> csrf.
                 csrfTokenRepository(csrfTokenRepository).
                 csrfTokenRequestHandler(new CsrfTokenRequestAttributeHandler()));
 
@@ -64,10 +63,14 @@ public class SecurityConfig {
         http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
         http.authorizeHttpRequests(request -> request.
-                requestMatchers("/login","/registration","/csrf","/chat/**","/ws/info","/stream-flux","/favicon.ico","/**").permitAll().
+                        requestMatchers("/login", "/registration", "/csrf", "/chat/**", "/ws/info", "/stream-flux", "/favicon.ico", "/api/**").permitAll().
+                        //requestMatchers(HttpMethod.POST, "/api/posts", "/api/newsItems". "/api/shelters").authenticated().
+                        //requestMatchers(HttpMethod.PUT, "/api/posts/**", "/api/newsItems/**").authenticated().
+                        //requestMatchers(HttpMethod.DELETE, "/api/posts/**", "/api/newsItems/**","/api/shelters").authenticated().
+                        //requestMatchers(HttpMethod.GET, "/api/posts", "/api/posts/**", "/api/newsItems", "/api/newsItems/**").permitAll().
 //                requestMatchers("/api/**", "/currentAccount").authenticated().
 //                requestMatchers("/admin/**").hasAuthority(Role.VOLUNTEER.getAuthority()).
-                anyRequest().authenticated()
+        anyRequest().authenticated()
         );
 
         http.requiresChannel(channel ->
@@ -91,9 +94,9 @@ public class SecurityConfig {
                         allowedOrigins(domain, "https://localhost", "http://localhost").
                         allowedOriginPatterns(pattern).
                         allowedOriginPatterns("*").
-                        exposedHeaders("*", "Set-Cookie","X-XSRF-TOKEN").
+                        exposedHeaders("*", "Set-Cookie", "X-XSRF-TOKEN").
                         allowedHeaders("*").
-                        allowedMethods("GET", "POST", "PUT", "PATCH", "DELETE","OPTIONS").
+                        allowedMethods("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS").
                         allowCredentials(true);
             }
         };

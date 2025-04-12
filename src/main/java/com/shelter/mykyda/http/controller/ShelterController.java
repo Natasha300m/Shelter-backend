@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.Map;
 
@@ -26,23 +27,25 @@ public class ShelterController {
     private final DeleteService deleteService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<ShelterDTO> getShelter(@PathVariable Long id){
+    public ResponseEntity<ShelterDTO> getShelter(@PathVariable Long id) {
         return shelterService.findById(id);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteShelter(@PathVariable Long id){
-        return deleteService.deleteShelter(id);
+    public ResponseEntity<String> deleteShelter(@PathVariable Long id,
+                                                Principal principal) {
+        return deleteService.deleteShelter(id, principal);
     }
 
     @GetMapping()
-    public ResponseEntity<List<ShelterDTO>> getFilteredShelters(@RequestParam Map<String, String> filters){
+    public ResponseEntity<List<ShelterDTO>> getFilteredShelters(@RequestParam Map<String, String> filters) {
         return shelterService.findFiltered(filters);
     }
 
     @PostMapping()
-    public ResponseEntity<Long> postShelter(@RequestBody ShelterSaveDTO dto){
-        return saveService.saveShelter(dto);
+    public ResponseEntity<Long> postShelter(@RequestBody ShelterSaveDTO dto,
+                                            Principal principal) {
+        return saveService.saveShelter(dto, principal);
     }
 
 }
