@@ -51,12 +51,10 @@ public class User  implements UserDetails {
     //Todo:validate
     private String contacts;
 
-
     @Builder.Default
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
     @JsonBackReference
     private List<Post> posts = new ArrayList<>();
-
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

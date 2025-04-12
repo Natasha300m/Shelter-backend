@@ -38,7 +38,7 @@ public class PostSpecification {
 
     public static Specification<Post> hasPetAgeBelow(Integer petAge) {
         return (root, query, builder) ->
-                builder.lessThanOrEqualTo(root.get("petAge"), petAge);
+                builder.lessThan(root.get("petAge"), petAge);
     }
 
     public static Specification<Post> hasShelterId(Long shelterId) {
