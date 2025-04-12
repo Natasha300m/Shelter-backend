@@ -51,11 +51,11 @@ public class UserService implements UserDetailsService {
     }
 
     public User findById(@NotNull Long id) {
-        return userRepository.findById(id).orElseThrow(() -> new RuntimeException("sdf"));
+        return userRepository.findById(id).orElseThrow(() -> new NotFoundException("user not found"));
     }
 
     public User findByUsername(@NotNull String username) {
-        return userRepository.findByEmail(username).orElseThrow(() -> new NotFoundException("sdf"));
+        return userRepository.findByEmail(username).orElseThrow(() -> new NotFoundException("user not found"));
     }
 
 

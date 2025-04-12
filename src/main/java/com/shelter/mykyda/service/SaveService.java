@@ -7,6 +7,7 @@ import com.shelter.mykyda.dto.PostPutDTO;
 import com.shelter.mykyda.dto.PostSaveDTO;
 import com.shelter.mykyda.dto.ShelterSaveDTO;
 import com.shelter.mykyda.exeption.NotFoundException;
+import com.shelter.mykyda.security.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -22,13 +22,13 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<String> handleOauth2Exception(Oauth2Exception e) {
         return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
     }
-    @ExceptionHandler(Exception.class)
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    @ResponseBody
-    public Map<String, Object> handleAllExceptions(Exception ex) {
-        Map<String, Object> response = new HashMap<>();
-        response.put("error", "Internal Server Error");
-        response.put("message", ex.getMessage());
-        return response;
-    }
+//    @ExceptionHandler(Exception.class)
+//    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+//    @ResponseBody
+//    public Map<String, Object> handleAllExceptions(Exception ex) {
+//        Map<String, Object> response = new HashMap<>();
+//        response.put("error", "Internal Server Error");
+//        response.put("message", ex.getMessage());
+//        return response;
+//    }
 }

@@ -35,8 +35,8 @@ server:
   port: 443
 
 aws:
-  access_key: ${AWS_PUBLIC}
-  secret_access_key: ${AWS_SECRET}
+  access: ${AWS_PUBLIC}
+  secret: ${AWS_SECRET}
 
 logging:
   level:

@@ -2,6 +2,7 @@ package com.shelter.mykyda.service;
 
 import com.shelter.mykyda.database.repository.*;
 import com.shelter.mykyda.exeption.NotFoundException;
+import com.shelter.mykyda.security.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -40,7 +40,6 @@ public class User  implements UserDetails {
     @Size(min = 8, message = "password is too short")
     private String password;
 
-    @NotBlank(message = "role is required")
     @Enumerated(EnumType.STRING)
     private Role role;
 

@@ -18,11 +18,6 @@ public class UserRegistrationDto {
     @NotBlank(message = "User should contains an E-mail!")
     private String email;
 
-    @NotBlank(message = "User should contains a username!")
-    @Size(min = 6, max = 30, message = "Username should have at least 6 characters!")
-    private String username;
-
-    private String bio;
     @NotBlank(message = "User should contains a password!")
     @Size(min = 8,max = 50, message = "Password should have at least 8 characters!")
     private String password;
