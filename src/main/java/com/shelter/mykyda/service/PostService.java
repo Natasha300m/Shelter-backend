@@ -25,7 +25,7 @@ public class PostService {
 
     private final PostRepository postRepository;
 
-    private final Integer POSTS_PAGE_SIZE = 2;
+    private final Integer POSTS_PAGE_SIZE = 10;
 
     @Transactional(readOnly = true)
     public ResponseEntity<PostFullDTO> findById(Long id) {

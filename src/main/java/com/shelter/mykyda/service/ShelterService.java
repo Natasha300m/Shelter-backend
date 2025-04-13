@@ -23,7 +23,7 @@ public class ShelterService {
 
     private final ShelterRepository shelterRepository;
 
-    private final Integer SHELTERS_PAGE_SIZE = 2;
+    private final Integer SHELTERS_PAGE_SIZE = 10;
 
     @Transactional(readOnly = true)
     public ResponseEntity<ShelterDTO> findById(Long id) {

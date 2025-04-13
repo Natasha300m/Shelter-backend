@@ -23,7 +23,7 @@ public class NewsItemService {
 
     private final NewsItemRepository newsRepository;
 
-    private final Integer NEWS_PAGE_SIZE = 2;
+    private final Integer NEWS_PAGE_SIZE = 10;
 
     @Transactional(readOnly = true)
     public ResponseEntity<NewsItemDTO> findById(Long id) {
