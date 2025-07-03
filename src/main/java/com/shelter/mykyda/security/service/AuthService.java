@@ -7,6 +7,7 @@ import com.shelter.mykyda.security.dto.UserRegistrationDto;
 import com.shelter.mykyda.security.mapper.UserMapper;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -25,28 +26,29 @@ import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class AuthService {
+
     private final UserService userService;
+
     private final UserMapper userMapper;
+
     private final AuthenticationManager authenticationManager;
+
     private final JwtUtil jwtUtil;
-    private final PasswordEncoder passwordEncoder;
-
-    @Value("${spring.security.domain}")
-    private String domain;
-
-    @Value("${server.domain}")
-    private String serverDomain;
 
     public ResponseEntity<String> login(UserLoginDto userLoginDto) {
         String login = userLoginDto.getLogin();
         User user = userService.findByUsername(login);
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(), userLoginDto.getPassword()));
+            log.info("Login User successful: {}", user);
             setCookie(user);
         } catch (BadCredentialsException e) {
+            log.info("Invalid username or password: {}", login);
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
         } catch (AuthenticationException e) {
+            log.info("Internal error at login in AuthService: {}", login);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Authentication failed");
         }
         return ResponseEntity.ok("Successfully logged in");
@@ -55,14 +57,11 @@ public class AuthService {
     public ResponseEntity<String> registration(UserRegistrationDto userRegistrationDto) {
         User user = userService.save(userMapper.userRegistrationDtoToUser(userRegistrationDto));
         setCookie(user);
+        log.info("Registration User Successful: {}", user);
         return ResponseEntity.ok("User registered successfully");
     }
 
     private void setCookie(User user) {
-        if (!domain.startsWith("http://") && !domain.startsWith("https://")) {
-            throw new IllegalArgumentException("Invalid URL format: " + domain);
-        }
-        String pattern = domain.replaceFirst("^(https?://)", ".");
         HttpServletResponse response = ((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder
                 .getRequestAttributes()))
                 .getResponse();
@@ -70,9 +69,8 @@ public class AuthService {
                 httpOnly(true).
                 maxAge(24_192_000).
                 sameSite("None").
-                domain(pattern).
                 path("/").
-                secure(true).
+                secure(false).
                 build();
         Objects.requireNonNull(response).addHeader(HttpHeaders.SET_COOKIE, responseCookie.toString());
     }

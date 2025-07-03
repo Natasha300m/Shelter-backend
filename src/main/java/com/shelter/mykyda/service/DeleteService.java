@@ -68,6 +68,8 @@ public class DeleteService {
         if (user.getRole() == Role.MANAGER && user.getShelter()!=null) {
             if (Objects.equals(user.getShelter().getId(), id)) {
                 shelterRepository.findById(id).orElseThrow(() -> new NotFoundException("News item with such id not found"));
+                user.setShelter(null);
+                userRepository.save(user);
                 shelterRepository.deleteById(id);
                 return new ResponseEntity<>(HttpStatus.OK);
             } else {

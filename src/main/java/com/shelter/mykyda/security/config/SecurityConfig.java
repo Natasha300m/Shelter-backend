@@ -28,20 +28,10 @@ public class SecurityConfig {
     private final AuthenticationEntryPoint authenticationEntryPoint;
     private final AccessDeniedHandler accessDeniedHandler;
 
-    @Value("${spring.security.domain}")
-    private String domain;
-
     @Bean
     public SecurityFilterChain getFilterChain(HttpSecurity http) throws Exception {
-        CookieCsrfTokenRepository csrfTokenRepository = CookieCsrfTokenRepository.withHttpOnlyFalse();
-        csrfTokenRepository.setCookieCustomizer(cookie -> cookie.secure(true).sameSite("None"));
-
-        http.csrf(csrf -> csrf.
-                csrfTokenRepository(csrfTokenRepository).
-                csrfTokenRequestHandler(new CsrfTokenRequestAttributeHandler()));
-
         http.cors(Customizer.withDefaults());
-
+        http.csrf(AbstractHttpConfigurer::disable);
         http.sessionManagement(session ->
                 session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
@@ -72,32 +62,20 @@ public class SecurityConfig {
 //                requestMatchers("/admin/**").hasAuthority(Role.VOLUNTEER.getAuthority()).
         anyRequest().authenticated()
         );
-
-        http.requiresChannel(channel ->
-                channel.anyRequest().requiresSecure());
-
         return http.build();
     }
 
     @Bean
     public WebMvcConfigurer corsConfigurer() {
         return new WebMvcConfigurer() {
-
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                if (!domain.startsWith("http://") && !domain.startsWith("https://")) {
-                    throw new IllegalArgumentException("Invalid URL format: " + domain);
-                }
-                String pattern = domain.replaceFirst("://", "://*.");
-
-                registry.addMapping("/**").
-                        allowedOrigins(domain, "https://localhost", "http://localhost").
-                        allowedOriginPatterns(pattern).
-                        allowedOriginPatterns("*").
-                        exposedHeaders("*", "Set-Cookie", "X-XSRF-TOKEN").
-                        allowedHeaders("*").
-                        allowedMethods("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS").
-                        allowCredentials(true);
+                registry.addMapping("/**")
+                        .allowedOriginPatterns("*")
+                        .allowedMethods("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS")
+                        .allowedHeaders("*")
+                        .exposedHeaders("Set-Cookie")
+                        .allowCredentials(true);
             }
         };
     }

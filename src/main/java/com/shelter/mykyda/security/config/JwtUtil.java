@@ -22,7 +22,8 @@ import static java.time.Instant.now;
 //TODO add exception
 @Component
 public class JwtUtil {
-    @Value("${spring.security.jwt.secret}")
+
+    @Value("${spring.jwt.secret}")
     private String secret;
 
     private SecretKey getSecretKey() {
@@ -51,8 +52,7 @@ public class JwtUtil {
     }
 
     public List<String> getRoles(String token) {
-        List<String> roles = getAllClaimsFromToken(token).get("roles", List.class);
-        return roles;
+        return getAllClaimsFromToken(token).get("roles", List.class);
     }
 
     private Claims getAllClaimsFromToken(String token) {

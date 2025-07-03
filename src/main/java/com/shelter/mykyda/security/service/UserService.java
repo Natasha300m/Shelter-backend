@@ -42,9 +42,7 @@ public class UserService implements UserDetailsService {
     private final ServerProperties serverProperties;
     private final UserMapper userMapper;
     private final JwtUtil jwtUtil;
-    @Value("${spring.security.domain}")
-    private String domain;
-    //get
+
 
     public List<User> findAll() {
         return userRepository.findAll();
@@ -199,11 +197,6 @@ public class UserService implements UserDetailsService {
 
 
     private void setCookie(User user) {
-        if (!domain.startsWith("http://") && !domain.startsWith("https://")) {
-            throw new IllegalArgumentException("Invalid URL format: " + domain);
-        }
-        String pattern = domain.replaceFirst("^(https?://)", ".");
-        System.out.println(pattern);
         HttpServletResponse response = ((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder
                 .getRequestAttributes()))
                 .getResponse();
@@ -211,7 +204,6 @@ public class UserService implements UserDetailsService {
                 httpOnly(true).
                 maxAge(24_192_000).
                 sameSite("None").
-                domain(pattern).
                 path("/").
                 secure(true).
                 build();

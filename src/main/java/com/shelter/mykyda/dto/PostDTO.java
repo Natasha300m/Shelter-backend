@@ -30,6 +30,7 @@ public class PostDTO {
 
     private String authorRole;
 
+    @Builder.Default
     private List<ImageDTO> images = new ArrayList<>();
 
     public static PostDTO mapToDTO(Post post) {

@@ -1,5 +1,6 @@
 package com.shelter.mykyda.security.mapper;
 
+import com.shelter.mykyda.database.entity.Role;
 import com.shelter.mykyda.dto.UserDTO;
 import com.shelter.mykyda.database.entity.User;
 import com.shelter.mykyda.security.dto.UserGetDto;
@@ -15,13 +16,17 @@ public interface UserMapper {
 
     User userGetDtoToUser(UserGetDto userGetDto);
 
-    @Mapping(target = "role", constant = "VOLUNTEER")
+    @Mapping(target = "role", expression = "java(convertToRole(userRegistrationDto.getRole()))")
     User userRegistrationDtoToUser(UserRegistrationDto userRegistrationDto);
 
-//    @Mapping(target = "displayName", source = "username")
-//    @Mapping(target = "image", constant = "image")
-//    @Mapping(target = "isEmailVerified", constant = "false")
-//    @Mapping(target = "role", constant = "USER")
+    default Role convertToRole(String role) {
+        try {
+            return Role.valueOf(role.toUpperCase());
+        } catch (IllegalArgumentException | NullPointerException e) {
+            throw new IllegalArgumentException("Invalid role: " + role);
+        }
+    }
+
     UserDTO userToUserDto(User user);
 
 }

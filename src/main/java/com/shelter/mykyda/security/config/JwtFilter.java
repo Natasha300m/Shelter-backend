@@ -25,12 +25,14 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Slf4j
 public class JwtFilter extends OncePerRequestFilter {
+
     private final JwtUtil jwtUtil;
+
     private final UserService userService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        String jwtToken = null;
+        String jwtToken;
 
         Cookie cookie = Arrays.stream(Optional.ofNullable(request.getCookies()).orElse(new Cookie[]{}))
                 .filter(cookieElement -> "accessToken".toLowerCase(Locale.ROOT).equals(cookieElement.getName().toLowerCase(Locale.ROOT)))
@@ -78,7 +80,6 @@ public class JwtFilter extends OncePerRequestFilter {
             return;
         }
         filterChain.doFilter(request, response);
-        return;
     }
 
 }

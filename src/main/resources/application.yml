@@ -10,29 +10,14 @@ spring:
     hibernate:
       ddl-auto: update
 
-  security:
-    domain: https://localhost
-
-    jwt:
-      secret: ${SECRET_KEY}
-
+  jwt:
+    secret: ${SECRET_KEY}
 
   servlet:
     multipart:
       enabled: true
       max-file-size: 200MB
       max-request-size: 200MB
-
-
-server:
-  domain: https://localhost
-  ssl:
-    key-store: classpath:keystore/ya3.p12
-    key-store-password: javalover
-    key-store-type: pkcs12
-    key-alias: ya
-    key-password: javalover
-  port: 443
 
 aws:
   access: ${AWS_PUBLIC}

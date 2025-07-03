@@ -17,11 +17,7 @@ public class AccessDeniedHandler implements org.springframework.security.web.acc
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException, ServletException {
         log.warn("Access denied: {}", accessDeniedException.getMessage()+ " to "+request.getRequestURI());
-        if (accessDeniedException instanceof CsrfException) {
-            response.getWriter().write("Invalid or missing CSRF token");
-        }else {
-            response.getWriter().write("Access denied: "+accessDeniedException.getMessage());
-        }
+        response.getWriter().write("Access denied: "+accessDeniedException.getMessage());
         response.setStatus(403);
     }
 }

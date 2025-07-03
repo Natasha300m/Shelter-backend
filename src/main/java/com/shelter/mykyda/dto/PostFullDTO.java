@@ -34,6 +34,7 @@ public class PostFullDTO {
 
     private UserDTO user;
 
+    @Builder.Default
     private List<ImageDTO> images = new ArrayList<>();
 
     public static PostFullDTO mapToDTO(Post post) {
